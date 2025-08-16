@@ -1,0 +1,44 @@
+@model DSEB_projeto.Models.Receita
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Receita</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="DataReceita" class="control-label"></label>
+                <input asp-for="DataReceita" class="form-control" />
+                <span asp-validation-for="DataReceita" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Lucro" class="control-label"></label>
+                <input asp-for="Lucro" class="form-control" />
+                <span asp-validation-for="Lucro" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ValorPedidos" class="control-label"></label>
+                <input asp-for="ValorPedidos" class="form-control" />
+                <span asp-validation-for="ValorPedidos" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
