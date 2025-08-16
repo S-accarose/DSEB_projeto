@@ -14,17 +14,10 @@ public class Receita
     [Required]
     public decimal Lucro { get; set; }
 
+    // Soma dos valores dos pedidos relacionados a esta receita
     [Required]
     public decimal ValorPedidos { get; set; }
 
-    [ForeignKey("ValorPedidos")]
-    [Required]
-    public Pedido Valor { get; set; }
-
-    // Navigation properties
+    // Uma receita tem vários pedidos
     public ICollection<Pedido>? Pedidos { get; set; }
-
-    public ICollection<Servico>? Servicos { get; set; }
-
-    public ICollection<Usuario>? Usuarios { get; set; }
 }
