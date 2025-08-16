@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DSEB_projeto.Data;
 
-public class ApplicationDbContext : IdentityDbContext
+public class ApplicationDbContext : IdentityDbContext<Usuario>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)

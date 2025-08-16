@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace DSEB_projeto.Models;
 
-public class Usuario
+public class Usuario : IdentityUser
 {
     [Key]
     public int Id { get; set; }
