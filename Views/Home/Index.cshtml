@@ -2,7 +2,42 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    .hero-content-wrapper {
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    .hero-content {
+        background: rgba(255,255,255,0.85);
+        padding: 3rem 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 0 30px rgba(0,0,0,0.2);
+        text-align: center;
+        max-width: 500px;
+    }
+    .hero-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #8B0000;
+        margin-bottom: 1rem;
+    }
+    .hero-text {
+        font-size: 1.2rem;
+        color: #333;
+    }
+</style>
+
+<div class="hero-content-wrapper">
+    <div class="hero-content">
+        <div class="hero-title">Buffet Sabor Divino</div>
+        <div class="hero-text">
+            Bem-vindo ao Buffet Sabor Divino!<br />
+            Especialistas em transformar seu evento em uma experiência gastronômica inesquecível.<br />
+            Oferecemos serviços completos de buffet para festas, casamentos, aniversários e eventos corporativos, com cardápios variados e atendimento personalizado.<br />
+            Contrate online e leve sabor, praticidade e sofisticação para o seu evento!
+        </div>        
+    </div>
 </div>
