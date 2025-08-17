@@ -15,10 +15,13 @@ namespace DSEB_projeto.Controllers
     public class PedidosController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<Usuario> _userManager;
 
-        public PedidosController(ApplicationDbContext context)
+        // Apenas este construtor!
+        public PedidosController(ApplicationDbContext context, UserManager<Usuario> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Pedidos
@@ -161,14 +164,6 @@ namespace DSEB_projeto.Controllers
         private bool PedidoExists(int id)
         {
             return _context.Pedidos.Any(e => e.Id == id);
-        }
-
-        private readonly UserManager<Usuario> _userManager;
-
-        public PedidosController(ApplicationDbContext context, UserManager<Usuario> userManager)
-        {
-            _context = context;
-            _userManager = userManager;
         }
 
         [HttpPost]

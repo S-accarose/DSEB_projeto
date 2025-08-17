@@ -1,8 +1,30 @@
+@model IEnumerable<DSEB_projeto.Models.Pedido>
 @{
     ViewData["Title"] = "Pedidos";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<h1>@ViewData["Title"]</h1>
+
+<div class="container-lg">
+    <div class="row">
+        @if (!Model.Any())
+        {
+            <div class="col-12">
+                <p>Nenhum pedido encontrado.</p>
+            </div>
+        }
+        else
+        {
+            @foreach (var pedido in Model)
+            {
+                <div class="col-12 mb-2">
+                    <div class="pedido d-flex flex-wrap align-items-center border rounded p-2">
+                        <span class="me-3"><strong>Pedido número:</strong> @pedido.Id</span>
+                        <span class="me-3"><strong>Descrição:</strong> @pedido.Descricao</span>
+                        <span class="me-3"><strong>Data do pedido:</strong> @pedido.DataPedido.ToString("dd/MM/yyyy")</span>
+                    </div>
+                </div>
+            }
+        }
+    </div>
 </div>
