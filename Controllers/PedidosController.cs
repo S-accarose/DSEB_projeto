@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace DSEB_projeto.Controllers
 {
+    [Authorize]
     public class PedidosController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -27,8 +28,19 @@ namespace DSEB_projeto.Controllers
         // GET: Pedidos
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Pedidos.Include(p => p.Usuario);
-            return View(await applicationDbContext.ToListAsync());
+            var usuario = await _userManager.GetUserAsync(User);
+            if (usuario == null)
+            {
+                // Usuário não autenticado, retorna lista vazia ou redireciona
+                return View(new List<Pedido>());
+            }
+
+            var pedidos = await _context.Pedidos
+                .Where(p => p.UsuarioId == usuario.Id)
+                .OrderByDescending(p => p.DataPedido)
+                .ToListAsync();
+
+            return View(pedidos);
         }
 
         // GET: Pedidos/Details/5
@@ -183,7 +195,7 @@ namespace DSEB_projeto.Controllers
 
             var pedido = new Pedido
             {
-                Descricao = $"Pedido número , cliente {usuario.Nome} do serviço {servico.Nome} no valor de {valorFinal.ToString("C")}",
+                Descricao = $"Pedido número , cliente {usuario.Nome}, solicitou o serviço  {servico.Nome} no valor de {valorFinal.ToString("C")}",
                 Valor = valorFinal,
                 DataPedido = DateTime.Now,
                 UsuarioId = usuario.Id
@@ -193,7 +205,7 @@ namespace DSEB_projeto.Controllers
             await _context.SaveChangesAsync();
 
             // Atualiza novamente a descrição só que com o ID real
-            pedido.Descricao = $"Pedido número {pedido.Id}, cliente {usuario.Nome} do serviço {servico.Nome} no valor de {valorFinal.ToString("C")}";
+            pedido.Descricao = $"Pedido número {pedido.Id}, cliente {usuario.Nome}, solicitou o serviço {servico.Nome} no valor de {valorFinal.ToString("C")}";
             _context.Pedidos.Update(pedido);
             await _context.SaveChangesAsync();
 
