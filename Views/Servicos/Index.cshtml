@@ -37,5 +37,29 @@
                 this.closest('.card-body').querySelector('.preco').innerText = "Valor por pessoa: " + valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             });
         });
+
+        document.querySelectorAll('.solicitar-servico').forEach(function(btn) {
+            btn.addEventListener('click', async function () {
+                const card = btn.closest('.card');
+                const servicoId = btn.getAttribute('data-id');
+                const convidados = card.querySelector('.numConvidados').value;
+
+                const response = await fetch('/Pedidos/CriarPedido', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                    },
+                    body: JSON.stringify({ servicoId: servicoId, convidados: convidados })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    alert('Pedido realizado com sucesso! Número do pedido: ' + data.pedidoId);
+                } else {
+                    alert('Erro ao realizar pedido. Faça login ou tente novamente.');
+                }
+            });
+        });
     </script>
 }

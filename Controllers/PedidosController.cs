@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DSEB_projeto.Data;
 using DSEB_projeto.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace DSEB_projeto.Controllers
 {
@@ -160,5 +162,48 @@ namespace DSEB_projeto.Controllers
         {
             return _context.Pedidos.Any(e => e.Id == id);
         }
+
+        private readonly UserManager<Usuario> _userManager;
+
+        public PedidosController(ApplicationDbContext context, UserManager<Usuario> userManager)
+        {
+            _context = context;
+            _userManager = userManager;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CriarPedido(int servicoId, int convidados)
+        {
+            var usuario = await _userManager.GetUserAsync(User);
+            if (usuario == null)
+                return Unauthorized();
+
+            var servico = await _context.Servicos.FindAsync(servicoId);
+            if (servico == null)
+                return NotFound();
+
+            decimal valorFixos = 200 + 350;
+            decimal valorPorPessoa = servico.Preco * convidados;
+            decimal valorFinal = valorFixos + valorPorPessoa;
+
+            var pedido = new Pedido
+            {
+                Descricao = $"Pedido número , cliente {usuario.Nome} do serviço {servico.Nome} no valor de {valorFinal.ToString("C")}",
+                Valor = valorFinal,
+                DataPedido = DateTime.Now,
+                UsuarioId = usuario.Id
+            };
+
+            _context.Pedidos.Add(pedido);
+            await _context.SaveChangesAsync();
+
+            // Atualiza novamente a descrição só que com o ID real
+            pedido.Descricao = $"Pedido número {pedido.Id}, cliente {usuario.Nome} do serviço {servico.Nome} no valor de {valorFinal.ToString("C")}";
+            _context.Pedidos.Update(pedido);
+            await _context.SaveChangesAsync();
+
+            return Json(new { sucesso = true, pedidoId = pedido.Id });
+        }
     }
+
 }
