@@ -1,6 +1,41 @@
+@model IEnumerable<DSEB_projeto.Models.Servico>
 @{
     ViewData["Title"] = "Serviços";
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container" style="margin: 5vh 0 0 0;">
+    <div class="row">
+        @foreach (var servico in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card" style="height: 25rem; width: 100%;">
+                    <div class="tituloservico" style="margin: 10px 0 0 15px;">@servico.Nome</div>
+                    <div class="card-body">
+                        <p class="card-text descricao">@servico.Descricao</p>
+                        <h6>Valores fixos: 200R$ Contratação do serviço + 350R$ Funcionários.</h6>
+                        <h5 class="preco" data-valor="@servico.Preco">Valor por pessoa: @servico.Preco.ToString("C")</h5>
+                        <div class="mb-3">
+                            <label class="form-label">Número de convidados:</label>
+                            <input type="number" class="form-control numConvidados" min="1" value="1" data-preco="@servico.Preco" />
+                        </div>
+                        <button type="button" class="btn">Solicitar Serviço</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.numConvidados').forEach(function(input) {
+            input.addEventListener('input', function () {
+                const preco = parseFloat(this.getAttribute('data-preco'));
+                const num = parseInt(this.value) || 1;
+                const valorTotal = preco * num;
+                this.closest('.card-body').querySelector('.preco').innerText = "Valor por pessoa: " + valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            });
+        });
+    </script>
+}
