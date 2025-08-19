@@ -7,12 +7,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DSEB_projeto.Data;
 using DSEB_projeto.Models;
+using Microsoft.AspNetCore.Authorization;
+using DSEB_projeto.Services;
 
 namespace DSEB_projeto.Controllers
 {
+    [Authorize]
     public class ServicosController : Controller
     {
         private readonly ApplicationDbContext _context;
+
 
         public ServicosController(ApplicationDbContext context)
         {
@@ -20,11 +24,25 @@ namespace DSEB_projeto.Controllers
         }
 
         // GET: Servicos
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var servicos = await _context.Servicos.ToListAsync();
+            int totalServicos = _context.Servicos.Count();
+
+            // Se houver menos de 10, gera até completar 10
+            if (totalServicos < 10)
+            {
+                int quantidadeFaltando = 10 - totalServicos;
+
+                var seeder = new ServicosSeeder(_context);
+                seeder.GerarProdutos(quantidadeFaltando);
+            }
+            
             return View(servicos);
+
         }
+
         // GET: Servicos/Details/5
         public async Task<IActionResult> Details(int? id)
         {

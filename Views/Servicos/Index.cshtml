@@ -17,9 +17,11 @@
                         <h5 class="preco" data-valor="@servico.Preco">Valor: @servico.Preco.ToString("C")</h5>
                         <div class="mb-3">
                             <label class="form-label">Número de convidados:</label>
-                            <input type="number" class="form-control numConvidados" min="1" value="1" data-preco="@servico.Preco" />
+                            <input type="number" class="form-control numConvidados" min="1" value="1"
+                                data-preco="@servico.Preco" />
                         </div>
-                        <button type="button" class="btn btn-primary solicitar-servico" data-id="@servico.Id">Solicitar Serviço</button>
+                        <button type="button" class="btn btn-primary solicitar-servico" data-id="@servico.Id">Solicitar
+                            Serviço</button>
                     </div>
                 </div>
             </div>
@@ -27,9 +29,16 @@
     </div>
 </div>
 
+@if (User.Identity.IsAuthenticated)
+{
+    <div>
+        <a class="nav-link text-dark" asp-area="" asp-controller="Servicos" asp-action="Create">Pedidos</a>
+    </div>
+}
+
 @section Scripts {
     <script>
-        document.querySelectorAll('.numConvidados').forEach(function(input) {
+        document.querySelectorAll('.numConvidados').forEach(function (input) {
             input.addEventListener('input', function () {
                 const preco = parseFloat(this.getAttribute('data-preco'));
                 const num = parseInt(this.value) || 1;
@@ -38,7 +47,7 @@
             });
         });
 
-        document.querySelectorAll('.solicitar-servico').forEach(function(btn) {
+        document.querySelectorAll('.solicitar-servico').forEach(function (btn) {
             btn.addEventListener('click', async function () {
                 const card = btn.closest('.card');
                 const servicoId = btn.getAttribute('data-id');
