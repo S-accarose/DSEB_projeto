@@ -24,7 +24,8 @@ namespace DSEB_projeto.Services
                 {
                     Nome = $"{i}",
                     Preco = 10 + i,
-                    Descricao = $"Produto {i}"
+                    Descricao = $"Produto {i}",
+                    ImagemString = null // URL de exemplo, substitua conforme necessário
                 });
             }
 

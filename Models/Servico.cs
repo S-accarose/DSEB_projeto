@@ -16,6 +16,9 @@ public class Servico
     [Required]
     public string? Descricao { get; set; }
 
+    [Required]
+    public string? ImagemString { get; set; }
+
     // Navigation properties
     public ICollection<Pedido>? Pedidos { get; set; }
 }
