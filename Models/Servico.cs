@@ -16,8 +16,10 @@ public class Servico
     [Required]
     public string? Descricao { get; set; }
 
-    [Required]
     public string? ImagemString { get; set; }
+
+    [Display(Name = "Caminho da Imagem")]
+    public string? ImagemUrl { get; set; }
 
     // Navigation properties
     public ICollection<Pedido>? Pedidos { get; set; }

@@ -11,7 +11,12 @@
             <div class="col-md-4 mb-4">
                 <div class="card" style="height: 25rem; width: 100%;">
                     <div class="tituloservico" style="margin: 10px 0 0 15px;">@servico.Nome</div>
-                    <img src="~/images/salgadinhos.jpg" style="height: 20%; width:90%; margin: 2% 5% 0 5%; "alt="Imagem do banco de dados">
+                    <img src="@(!string.IsNullOrEmpty(servico.ImagemUrl) ? servico.ImagemUrl : 
+                             !string.IsNullOrEmpty(servico.ImagemString) ? servico.ImagemString : 
+                             "/images/default.jpg")"
+                        style="height: 20%; width:90%; margin: 2% 5% 0 5%;" 
+                        alt="Imagem do serviço"
+                        onerror="this.onerror=null; this.src='/images/default.jpg';">
                     <div class="card-body">
                         <p class="card-text descricao">@servico.Descricao</p>
                         <h6>Valores fixos: 200R$ Contratação do serviço + 350R$ Funcionários.</h6>

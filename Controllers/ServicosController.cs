@@ -23,6 +23,82 @@ namespace DSEB_projeto.Controllers
             _context = context;
         }
 
+        private (string base64String, string imageUrl) ProcessUploadedFile(IFormFile ImageFile)
+        {
+            if (ImageFile == null)
+                return (string.Empty, string.Empty);
+
+            // Verificar o tipo MIME do arquivo
+            var allowedTypes = new[] { "image/jpeg", "image/png", "image/gif" };
+            if (!allowedTypes.Contains(ImageFile.ContentType.ToLower()))
+            {
+                throw new ArgumentException("O arquivo enviado não é uma imagem válida. Apenas arquivos JPEG, PNG e GIF são permitidos.");
+            }
+
+            // Verificar o tamanho do arquivo (máximo 5MB)
+            if (ImageFile.Length > 5 * 1024 * 1024)
+            {
+                throw new ArgumentException("O arquivo é muito grande. O tamanho máximo permitido é 5MB.");
+            }
+
+            using (var ms = new MemoryStream())
+            {
+                ImageFile.CopyTo(ms);
+                byte[] imageBytes = ms.ToArray();
+
+                // Verificar se os bytes realmente representam uma imagem usando SkiaSharp
+                try
+                {
+                    using (var stream = new MemoryStream(imageBytes))
+                    {
+                        using (var codec = SkiaSharp.SKCodec.Create(stream))
+                        {
+                            if (codec == null)
+                            {
+                                throw new ArgumentException("O arquivo enviado não é uma imagem válida.");
+                            }
+
+                            // Opcional: verificar dimensões máximas
+                            if (codec.Info.Width > 4096 || codec.Info.Height > 4096)
+                            {
+                                throw new ArgumentException("A imagem é muito grande. As dimensões máximas permitidas são 4096x4096 pixels.");
+                            }
+                        }
+                    }
+                }
+                catch (ArgumentException)
+                {
+                    throw;
+                }
+                catch (Exception)
+                {
+                    throw new ArgumentException("O arquivo enviado não é uma imagem válida.");
+                }
+
+                // Gerar nome único para o arquivo
+                string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(ImageFile.FileName);
+                string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "uploads");
+                
+                // Criar diretório se não existir
+                if (!Directory.Exists(uploadPath))
+                {
+                    Directory.CreateDirectory(uploadPath);
+                }
+
+                // Salvar arquivo físico
+                string filePath = Path.Combine(uploadPath, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    ImageFile.CopyTo(fileStream);
+                }
+
+                // Retornar tanto a string base64 quanto o caminho da imagem
+                string base64String = Convert.ToBase64String(imageBytes);
+                string imageUrl = $"/images/uploads/{uniqueFileName}";
+                return ($"data:{ImageFile.ContentType};base64,{base64String}", imageUrl);
+            }
+        }
+
         // GET: Servicos
         [AllowAnonymous]
         public async Task<IActionResult> Index()
@@ -72,13 +148,30 @@ namespace DSEB_projeto.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Preco,Descricao")] Servico servico)
+        public async Task<IActionResult> Create([Bind("Id,Nome,Preco,Descricao")] Servico servico, IFormFile ImageFile)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(servico);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    if (ImageFile == null)
+                    {
+                        ModelState.AddModelError("ImageFile", "Por favor, selecione uma imagem.");
+                        return View(servico);
+                    }
+
+                    var (base64String, imageUrl) = ProcessUploadedFile(ImageFile);
+                    servico.ImagemString = base64String;
+                    servico.ImagemUrl = imageUrl;
+                    _context.Add(servico);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (ArgumentException ex)
+                {
+                    ModelState.AddModelError("ImageFile", ex.Message);
+                    return View(servico);
+                }
             }
             return View(servico);
         }
@@ -104,7 +197,7 @@ namespace DSEB_projeto.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Preco,Descricao")] Servico servico)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Preco,Descricao")] Servico servico, IFormFile ImageFile)
         {
             if (id != servico.Id)
             {
@@ -115,6 +208,32 @@ namespace DSEB_projeto.Controllers
             {
                 try
                 {
+                    var servicoExistente = await _context.Servicos.AsNoTracking().FirstOrDefaultAsync(s => s.Id == id);
+                    if (servicoExistente == null)
+                    {
+                        return NotFound();
+                    }
+
+                    try
+                    {
+                        if (ImageFile != null)
+                        {
+                            var (base64String, imageUrl) = ProcessUploadedFile(ImageFile);
+                            servico.ImagemString = base64String;
+                            servico.ImagemUrl = imageUrl;
+                        }
+                        else
+                        {
+                            servico.ImagemString = servicoExistente.ImagemString;
+                            servico.ImagemUrl = servicoExistente.ImagemUrl;
+                        }
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        ModelState.AddModelError("ImageFile", ex.Message);
+                        return View(servico);
+                    }
+                    
                     _context.Update(servico);
                     await _context.SaveChangesAsync();
                 }

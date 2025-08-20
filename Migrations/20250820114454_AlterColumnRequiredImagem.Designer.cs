@@ -4,6 +4,7 @@ using DSEB_projeto.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DSEB_projeto.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250820114454_AlterColumnRequiredImagem")]
+    partial class AlterColumnRequiredImagem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,9 +101,6 @@ namespace DSEB_projeto.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("ImagemString")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("ImagemUrl")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Nome")
