@@ -4,6 +4,7 @@ using DSEB_projeto.Data;
 using DSEB_projeto.Models;
 using Microsoft.AspNetCore.Server.IIS;
 using Microsoft.AspNetCore.Http.Features;
+using DSEB_projeto.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,20 @@ ServerVersion.AutoDetect(connectionString)));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<Usuario>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+// Configurar políticas de senha mais simples para desenvolvimento
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequiredUniqueChars = 1;
+    options.SignIn.RequireConfirmedAccount = false;
+});
 
 builder.Services.Configure<IISServerOptions>(options =>
 {
@@ -29,7 +43,18 @@ builder.Services.Configure<FormOptions>(options =>
 
 builder.Services.AddControllersWithViews();
 
+// Adicionar o serviço de inicialização de roles e usuários
+builder.Services.AddScoped<SeedUserRoleInitial>();
+
 var app = builder.Build();
+
+// Inicializar roles e usuário admin
+using (var scope = app.Services.CreateScope())
+{
+    var seedUserRoleInitial = scope.ServiceProvider.GetRequiredService<SeedUserRoleInitial>();
+    await seedUserRoleInitial.SeedRolesAsync();
+    await seedUserRoleInitial.SeedUsersAsync();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

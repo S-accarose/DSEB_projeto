@@ -35,10 +35,10 @@
     </div>
 </div>
 
-@if (User.Identity.IsAuthenticated)
+@if (ViewBag.IsAdmin)
 {
-    <div>
-        <a class="nav-link text-dark" asp-area="" asp-controller="Servicos" asp-action="Create">Pedidos</a>
+    <div class="mb-3">
+        <a class="btn btn-primary" asp-action="Create">Criar Novo Serviço</a>
     </div>
 }
 

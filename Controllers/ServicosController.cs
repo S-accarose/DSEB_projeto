@@ -13,6 +13,7 @@ using DSEB_projeto.Services;
 namespace DSEB_projeto.Controllers
 {
     [Authorize]
+    [Authorize(Roles = "Admin")]
     public class ServicosController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -103,20 +104,23 @@ namespace DSEB_projeto.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            var servicos = await _context.Servicos.ToListAsync();
-            int totalServicos = _context.Servicos.Count();
-
-            // Se houver menos de 10, gera até completar 10
-            if (totalServicos < 10)
-            {
-                int quantidadeFaltando = 10 - totalServicos;
-
-                var seeder = new ServicosSeeder(_context);
-                seeder.GerarProdutos(quantidadeFaltando);
-            }
+            ViewBag.IsAdmin = User.IsInRole("Admin");
             
-            return View(servicos);
+                var servicos = await _context.Servicos.ToListAsync();
+                int totalServicos = _context.Servicos.Count();
 
+                // Se houver menos de 10, gera até completar 10
+                if (totalServicos < 10)
+                {
+                    int quantidadeFaltando = 10 - totalServicos;
+
+                    var seeder = new ServicosSeeder(_context);
+                    seeder.GerarProdutos(quantidadeFaltando);
+                }
+
+                return View(servicos);
+
+            
         }
 
         // GET: Servicos/Details/5
