@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
-using DSEB_projeto.Areas.Identity.Pages.Account; 
+using DSEB_projeto.Areas.Identity.Pages.Account;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -22,6 +22,11 @@ public class Usuario : IdentityUser
 
     public string? ImagemPerfil { get; set; }
 
-    
+    [Required(ErrorMessage = "O campo CPF é obrigatório")]
+    [StringLength(11, MinimumLength = 11, ErrorMessage = "O CPF deve conter exatamente 11 caracteres.")]
+    [RegularExpression("^[0-9]+$", ErrorMessage = "Por favor, insira apenas números.")]
+    [CustomValidation(typeof(ValidationCPF), nameof(ValidationCPF.IsValidCPF))]
+
+    public string? CPF { get; set; }
 
 }

@@ -42,6 +42,7 @@ namespace DSEB_projeto.Services
                 user.UserName = "admin@localhost";
                 user.Email = "admin@localhost";
                 user.Nome = "Administrador";
+                user.CPF = "07845612300";
                 user.EmailConfirmed = true;
                 user.LockoutEnabled = false;
 
