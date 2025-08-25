@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using DSEB_projeto.Services;
 
 namespace DSEB_projeto.Areas.Identity.Pages.Account
 {
@@ -30,6 +31,7 @@ namespace DSEB_projeto.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<Usuario> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+
 
         public RegisterModel(
             UserManager<Usuario> userManager,
@@ -91,6 +93,13 @@ namespace DSEB_projeto.Areas.Identity.Pages.Account
             [Display(Name = "Confirmar senha")]
             [Compare("Password", ErrorMessage = "A senha e a confirmação de senha não coincidem.")]
             public string ConfirmPassword { get; set; }
+
+            [Required(ErrorMessage = "O campo CPF é obrigatório")]
+            [StringLength(11, MinimumLength = 11, ErrorMessage = "O CPF deve conter exatamente 11 caracteres.")]
+            [RegularExpression("^[0-9]+$", ErrorMessage = "Por favor, insira apenas números.")]
+            [CustomValidation(typeof(ValidationCPF), nameof(ValidationCPF.IsValidCPF), ErrorMessage = "CPF inválido.")]
+            [Display(Name = "CPF")]
+            public string CPF { get; set; }
         }
 
 

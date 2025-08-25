@@ -22,10 +22,6 @@ public class Usuario : IdentityUser
 
     public string? ImagemPerfil { get; set; }
 
-    [Required]
-    [StringLength(11, MinimumLength = 11, ErrorMessage = "O CPF deve conter exatamente 11 caracteres.")]
-    [RegularExpression("^[0-9]+$", ErrorMessage = "Por favor, insira apenas números.")]
-    [CustomValidation(typeof(ValidationCPF), nameof(ValidationCPF.IsValidCPF), ErrorMessage = "CPF inválido.")]
-    public string CPF { get; set; }
+    
 
 }

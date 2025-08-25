@@ -32,6 +32,14 @@
                 <label asp-for="Input.ConfirmPassword">Confirm Password</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
+            <div>
+                <div class="form-floating mb-3">
+                    <!-- Se o "Input.CPF" estiver com erro, ignore -->
+                    <input asp-for="Input.CPF" class="form-control" autocomplete="cpf" aria-required="true" placeholder="CPF" />
+                    <label asp-for="Input.CPF">CPF</label>
+                    <span asp-validation-for="Input.CPF" class="text-danger"></span>
+                </div>
+            </div>
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
     </div>
