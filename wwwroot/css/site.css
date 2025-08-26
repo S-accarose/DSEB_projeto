@@ -31,8 +31,29 @@ footer{
   border-color: #102c57 !important;
 }
 
-.nav-link{
+.btn-nav{
+  background-color: 0 !important;
+  border-color: 0!important;
+  color: rgb(179, 179, 179) !important;
+}
+
+.btn-nav:hover{
   background-color: #102c57 !important;
-  border-color: #102c57 !important;
+  border-color: #102c57  !important;
+}
+
+.btn-active{
+  background-color: #102c57 !important;
+  border-color: #102c57  !important;
   color: white !important;
+}
+
+.card{
+  background-color: rgba(221, 221, 221, 0.603);
+  border-radius: 5%;
+}
+
+.numConvidados{
+  background-color: rgba(230, 230, 230, 0.904);
+  color: rgb(0, 0, 0);
 }

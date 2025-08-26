@@ -1,8 +1,4 @@
 @model IEnumerable<DSEB_projeto.Models.Servico>
-@{
-    ViewData["Title"] = "Serviços";
-}
-<h1>@ViewData["Title"]</h1>
 
 <div class="container" style="margin: 5vh 0 0 0;">
     <div class="row">
@@ -37,7 +33,7 @@
 
 @if (ViewBag.IsAdmin)
 {
-    <div class="mb-3">
+    <div class="container mb-3">
         <a class="btn btn-primary" asp-action="Create">Criar Novo Serviço</a>
     </div>
 }
