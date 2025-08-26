@@ -31,7 +31,7 @@
     </div>
 </div>
 
-@if (ViewBag.IsAdmin)
+@if (User.IsInRole("Admin"))
 {
     <div class="container mb-3">
         <a class="btn btn-primary" asp-action="Create">Criar Novo Serviço</a>

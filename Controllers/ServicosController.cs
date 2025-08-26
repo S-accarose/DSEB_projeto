@@ -104,7 +104,6 @@ namespace DSEB_projeto.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            ViewBag.IsAdmin = User.IsInRole("Admin");
             
                 var servicos = await _context.Servicos.ToListAsync();
                 int totalServicos = _context.Servicos.Count();

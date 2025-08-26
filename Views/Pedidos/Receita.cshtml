@@ -1,0 +1,10 @@
+@model IEnumerable<DSEB_projeto.Models.Pedido>
+<h2>Pedidos de @ViewBag.Usuario.Nome (@ViewBag.Usuario.Email)</h2>
+<ul>
+@foreach(var pedido in Model)
+{
+    <li>
+        Pedido número: @pedido.Id - @pedido.Descricao - @pedido.DataPedido.ToString("dd/MM/yyyy")
+    </li>
+}
+</ul>

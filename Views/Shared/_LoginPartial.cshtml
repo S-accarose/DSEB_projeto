@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
+
 @inject SignInManager<Usuario> SignInManager
 @inject UserManager<Usuario> UserManager
 
@@ -8,22 +9,22 @@
     var usuario = await UserManager.GetUserAsync(User);
     var roles = await UserManager.GetRolesAsync(usuario);
     <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-            Bem-vindo @usuario?.Nome! (@string.Join(", ", roles))
+        <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" style="color:white;">
+            Bem-vindo @usuario?.Nome!
         </a>
     </li>
     <li class="nav-item">
         <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            <button type="submit" class="nav-link btn btn-link text-custom">Logout</button>
         </form>
     </li>
 }
 else
 {
-    <li class="nav-item">
+    <li class="nav-item text-custom">
         <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item text-custom">
         <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
     </li>
 }

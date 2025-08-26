@@ -39,6 +39,18 @@ namespace DSEB_projeto.Controllers
                 .Where(p => p.UsuarioId == usuario.Id)
                 .OrderByDescending(p => p.DataPedido)
                 .ToListAsync();
+            var usuarios = _userManager.Users.ToList();
+            var usuariosNaoAdmin = new List<Usuario>();
+            foreach (var usuario1 in usuarios)
+            {
+                var roles = await _userManager.GetRolesAsync(usuario1);
+                if (!roles.Contains("Admin"))
+                {
+                    usuariosNaoAdmin.Add(usuario1);
+                }
+            }
+
+            ViewBag.Usuarios = usuariosNaoAdmin;
 
             return View(pedidos);
         }
@@ -68,6 +80,25 @@ namespace DSEB_projeto.Controllers
             ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Id");
             return View();
         }
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Pedidos(string usuarioId)
+        {
+            if (string.IsNullOrEmpty(usuarioId))
+                return NotFound();
+
+            var usuario = await _userManager.FindByIdAsync(usuarioId);
+            if (usuario == null)
+                return NotFound();
+
+            var pedidos = await _context.Pedidos
+                .Where(p => p.UsuarioId == usuarioId)
+                .OrderByDescending(p => p.DataPedido)
+                .ToListAsync();
+
+            ViewBag.Usuario = usuario;
+            return View("Receita", pedidos); // Views/Pedidos/Receitas.cshtml
+        }
+
 
         // POST: Pedidos/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -211,6 +242,7 @@ namespace DSEB_projeto.Controllers
 
             return Json(new { sucesso = true, pedidoId = pedido.Id });
         }
+
     }
 
 }

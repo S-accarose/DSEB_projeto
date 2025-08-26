@@ -22,6 +22,7 @@ namespace DSEB_projeto.Controllers
         // GET: Receitas
         public async Task<IActionResult> Index()
         {
+            
             return View(await _context.Receitas.ToListAsync());
         }
 
