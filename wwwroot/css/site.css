@@ -25,3 +25,14 @@ body {
 footer{
   background-color:#dac0a3;
 }
+
+.btn-primary{
+  background-color: #102c57 !important;
+  border-color: #102c57 !important;
+}
+
+.nav-link{
+  background-color: #102c57 !important;
+  border-color: #102c57 !important;
+  color: white !important;
+}

@@ -15,10 +15,9 @@
                 <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
                 <label asp-for="Username" class="form-label"></label>
             </div>
-            <div>  
-                <label class="form-label">CPF</label>
-                <div class="form-control" style="background-color: #f8f9fa;" readonly>
-                    @Model.CPF
+            <div class="form-floating mb-3">  
+                <input asp-for="CPF" class="form-control" placeholder="Please choose your username." disabled />
+                <label asp-for="CPF" class="form-label"></label>
             </div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number." />
