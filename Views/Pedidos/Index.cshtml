@@ -8,7 +8,7 @@
 
 <style>
     .card-pedido {
-        min-width: none;
+        min-width: 100%;
         border: 1px solid #ccc;
         border-radius: 5px;
         padding: 10px;
@@ -17,6 +17,26 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+    }
+
+    .pedido-info {
+        display: flex;
+        flex-direction: row;
+        gap: 30px;
+        flex: 1;
+    }
+
+    .pedido-info span {
+        min-width: 180px;
+        text-align: left;
+        display: inline-block;
+    }
+
+    .apagar-area {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        min-width: 160px;
     }
 
     .info {
@@ -55,43 +75,45 @@
             {
                 @foreach (var pedido in Model)
                 {
-                    <div class="col-12 mb-2">
-                        <div class="pedido d-flex flex-wrap align-items-center border rounded p-2">
-                            <span class="me-3"><strong class="info">Pedido número:</strong> <span
-                                    class="text-custom">@pedido.Id</span></span>
-                            <span class="me-3"><strong class="info">Descrição:</strong> <span
-                                    class="text-custom">@pedido.Descricao</span></span>
-                            <span class="me-3"><strong class="info">Data do pedido:</strong> <span
-                                    class="text-custom">@pedido.DataPedido.ToString("dd/MM/yyyy")</span></span>
-                            <button type="button" class="btn btn-primary apagar-pedido" data-id="@pedido.Id">Apagar
-                            Pedido</button>        
+                    <div class="col-12 mb-3">
+                        <div class="card-pedido">
+                            <div class="pedido-info">
+                                <span><strong class="info">Descrição:</strong> <span class="text-custom">@pedido.Descricao
+                                    </span></span>
+                                <span><strong class="info">Data do pedido:</strong> <span
+                                        class="text-custom">@pedido.DataPedido.ToString("dd/MM/yyyy")</span></span>
+                            </div>
+                            <div class="apagar-area">
+                                <button type="button" class="btn btn-primary apagar-pedido" data-id="@pedido.Id">Apagar
+                                    Pedido</button>
+                            </div>
                         </div>
                     </div>
-                }
             }
-
         }
 
+    }
     </div>
+</div>
 </div>
 <script>
     document.querySelectorAll('.apagar-pedido').forEach(function (btn) {
-            btn.addEventListener('click', async function () {
-                const pedidoId = btn.getAttribute('data-id');
-                if (confirm('Tem certeza que deseja apagar este serviço?')) {
-                    const response = await fetch(`/Pedidos/Delete/${pedidoId}`, {
-                        method: 'POST',
-                        headers: {
-                            'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
-                        }
-                    });
-                    if (response.ok) {
-                        alert('Serviço apagado com sucesso!');
-                        location.reload();
-                    } else {
-                        alert('Erro ao apagar serviço.');
+        btn.addEventListener('click', async function () {
+            const pedidoId = btn.getAttribute('data-id');
+            if (confirm('Tem certeza que deseja apagar este serviço?')) {
+                const response = await fetch(`/Pedidos/Delete/${pedidoId}`, {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
                     }
+                });
+                if (response.ok) {
+                    alert('Serviço apagado com sucesso!');
+                    location.reload();
+                } else {
+                    alert('Erro ao apagar serviço.');
                 }
-            });
+            }
         });
+    });
 </script>
