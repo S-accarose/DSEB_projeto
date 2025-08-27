@@ -1,10 +1,40 @@
 @model IEnumerable<DSEB_projeto.Models.Pedido>
-<h2>Pedidos de @ViewBag.Usuario.Nome (@ViewBag.Usuario.Email)</h2>
-<ul>
-@foreach(var pedido in Model)
-{
-    <li>
-        Pedido número: @pedido.Id - @pedido.Descricao - @pedido.DataPedido.ToString("dd/MM/yyyy")
-    </li>
-}
-</ul>
+@using Pedido = DSEB_projeto.Models.Pedido
+
+<style>
+    .card-pedido {
+        min-width: none;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: #7474749c;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .info{
+        font-weight: bold;
+        color: rgb(19, 32, 49);
+    }
+</style>
+
+<div class="container"><h1 class="text-custom">Pedidos de @ViewBag.Usuario.Nome (@ViewBag.Usuario.Email)</h1></div>
+
+<div class="container">
+    @foreach(var pedido in Model)
+    {
+        <div class="card-pedido" style="margin: 2vh 0 1vh 0;">
+            <div class="info">
+                Pedido número: @pedido.Id - @pedido.Descricao - @pedido.DataPedido.ToString("dd/MM/yyyy")
+            </div>
+        </div>
+    }
+    <div class="valorfinal">
+        <h3 class="text-custom">Total do valor gerado nos pedidos: @ViewBag.ValorTotal.ToString("C")</h3>
+    </div>
+</div>
+
+
+
+

@@ -96,7 +96,9 @@ namespace DSEB_projeto.Controllers
                 .ToListAsync();
 
             ViewBag.Usuario = usuario;
-            return View("Receita", pedidos); // Views/Pedidos/Receitas.cshtml
+            ViewBag.ValorTotal = pedidos.Sum(p => p.Valor); // Soma dos valores
+
+            return View("Receita", pedidos);
         }
 
 
@@ -239,6 +241,18 @@ namespace DSEB_projeto.Controllers
             pedido.Descricao = $"Pedido número {pedido.Id}, cliente {usuario.Nome}, solicitou o serviço {servico.Nome} no valor de {valorFinal.ToString("C")}";
             _context.Pedidos.Update(pedido);
             await _context.SaveChangesAsync();
+
+            // --- NOVO: Salvar Receita ---
+            var receita = new Receita
+            {
+                DataReceita = DateTime.Now,
+                Lucro = valorFinal, // ou calcule o lucro real se desejar
+                ValorPedidos = valorFinal,
+                Pedidos = new List<Pedido> { pedido }
+            };
+            _context.Receitas.Add(receita);
+            await _context.SaveChangesAsync();
+            // --- FIM NOVO ---
 
             return Json(new { sucesso = true, pedidoId = pedido.Id });
         }

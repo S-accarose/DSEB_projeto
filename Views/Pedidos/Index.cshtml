@@ -2,10 +2,25 @@
 @{
     var usuarios = ViewBag.Usuarios as List<DSEB_projeto.Models.Usuario>;     
 }
-@{
-    ViewData["Title"] = "Pedidos";
-}
+<div class="container"><H1 class="text-custom">Pedidos</H1></div>
 
+<style>
+    .card-pedido {
+        min-width: none;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: #7474749c;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .info{
+        font-weight: bold;
+        color: rgb(19, 32, 49);
+    }
+</style>
 
 <h1>@ViewData["Title"]</h1>
 
@@ -15,9 +30,12 @@
         {
             <ul>
             @foreach (var user in usuarios)
-            {                
-                    <li>@user.Nome (@user.Email)</li>
+            {
+                <div class="card-pedido" style="margin: 2vh 0 1vh 0;">
+                    <div class="info">@user.Nome (@user.Email)</div>
                     <a asp-action="Pedidos" asp-route-usuarioId="@user.Id">Ver pedidos</a>
+                </div>
+
             }
             </ul>
 
@@ -36,9 +54,9 @@
                 {
                     <div class="col-12 mb-2">
                         <div class="pedido d-flex flex-wrap align-items-center border rounded p-2">
-                            <span class="me-3"><strong>Pedido número:</strong> @pedido.Id</span>
-                            <span class="me-3"><strong>Descrição:</strong> @pedido.Descricao</span>
-                            <span class="me-3"><strong>Data do pedido:</strong> @pedido.DataPedido.ToString("dd/MM/yyyy")</span>
+                            <span class="me-3"><strong class="info">Pedido número:</strong> <span class="text-custom">@pedido.Id</span></span>
+                            <span class="me-3"><strong class="info">Descrição:</strong> <span class="text-custom">@pedido.Descricao</span></span>
+                            <span class="me-3"><strong class="info">Data do pedido:</strong> <span class="text-custom">@pedido.DataPedido.ToString("dd/MM/yyyy")</span></span>
                         </div>
                     </div>
                 }

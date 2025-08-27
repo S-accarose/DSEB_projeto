@@ -5,7 +5,7 @@
         @foreach (var servico in Model)
         {
             <div class="col-md-4 mb-4">
-                <div class="card" style="min-height: 25rem; width: 100%;">
+                <div class="card" style="min-height: 17rem; width: 100%;">
                     <div class="tituloservico" style="margin: 10px 0 0 15px;">@servico.Nome</div>
                     <img src="@(!string.IsNullOrEmpty(servico.ImagemUrl) ? servico.ImagemUrl : 
                              !string.IsNullOrEmpty(servico.ImagemString) ? servico.ImagemString : 
@@ -17,13 +17,17 @@
                         <p class="card-text descricao">@servico.Descricao</p>
                         <h6>Valores fixos: 200R$ Contratação do serviço + 350R$ Funcionários.</h6>
                         <h5 class="preco" data-valor="@servico.Preco">Valor: @servico.Preco.ToString("C")</h5>
-                        <div class="mb-3">
-                            <label class="form-label">Número de convidados:</label>
-                            <input type="number" class="form-control numConvidados" min="1" value="1"
-                                data-preco="@servico.Preco" />
-                        </div>
-                        <button type="button" class="btn btn-primary solicitar-servico" data-id="@servico.Id">Solicitar
-                            Serviço</button>
+                        @if (!User.IsInRole("Admin"))
+                        {
+                            <div class="mb-3">
+                                <label class="form-label">Número de convidados:</label>
+                                <input type="number" class="form-control numConvidados" min="1" value="1"
+                                    data-preco="@servico.Preco" />
+                            </div>
+                            
+                            <button type="button" class="btn btn-primary solicitar-servico" data-id="@servico.Id">Solicitar
+                                Serviço</button>
+                        }
                     </div>
                 </div>
             </div>

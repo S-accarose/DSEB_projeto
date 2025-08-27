@@ -1,9 +1,69 @@
 @model IEnumerable<DSEB_projeto.Models.Receita>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Receitas por Mês/Ano";
+    var receitasPorMes = Model
+        .GroupBy(r => new { r.DataReceita.Year, r.DataReceita.Month })
+        .OrderByDescending(g => g.Key.Year)
+        .ThenByDescending(g => g.Key.Month)
+        .ToList();
 }
 
-@foreach (var item in Model) {
-}
+<div class="container"><h1 class="mb-4 text-custom">Receitas por Mês/Ano</h1></div>
 
+<div class="container">
+    @foreach (var grupo in receitasPorMes)
+    {
+        // Agrupa por dia e soma os valores de cada dia
+        var receitasPorDia = grupo
+            .GroupBy(r => r.DataReceita.Date)
+            .Select(g => new {
+                Data = g.Key,
+                ValorPedidos = g.Sum(r => r.ValorPedidos),
+                Lucro = g.Sum(r => r.Lucro)
+            })
+            .OrderBy(r => r.Data)
+            .ToList();
+
+        var totalMes = grupo.Sum(r => r.ValorPedidos);
+        var totalLucroMes = grupo.Sum(r => r.Lucro);
+        var mesAno = new DateTime(grupo.Key.Year, grupo.Key.Month, 1).ToString("MMMM/yyyy");
+
+        <div class="card-receita mb-4 shadow-sm">
+            <div class="card-header text-custom">
+                <strong>@mesAno.ToUpper()</strong>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">
+                    Total do mês: @totalMes.ToString("C")
+                </h5>
+                <ul class="list-group list-group-flush">
+                    @foreach (var receita in receitasPorDia)
+                    {
+                        <li class="list-group-item">
+                            <span style="font-weight: bold;">Data:</span> @receita.Data.ToString("dd/MM/yyyy") |
+                            <span style="font-weight: bold;">Valor total dos pedidos:</span> @receita.ValorPedidos.ToString("C")
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .card-receita {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #616161;
+    }
+    .card-header {
+        background-color: #242424;
+        color: rgb(172, 172, 172);
+        font-size: 1.25rem;
+    }
+    .list-group-item{
+        background-color: #c5c5c59c;
+        color: rgb(19, 32, 49);
+    }
+</style>
