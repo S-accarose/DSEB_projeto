@@ -1,8 +1,10 @@
 @model IEnumerable<DSEB_projeto.Models.Pedido>
 @{
-    var usuarios = ViewBag.Usuarios as List<DSEB_projeto.Models.Usuario>;     
+    var usuarios = ViewBag.Usuarios as List<DSEB_projeto.Models.Usuario>;
 }
-<div class="container"><H1 class="text-custom">Pedidos</H1></div>
+<div class="container">
+    <H1 class="text-custom">Pedidos</H1>
+</div>
 
 <style>
     .card-pedido {
@@ -16,7 +18,8 @@
         justify-content: space-between;
         align-items: center;
     }
-    .info{
+
+    .info {
         font-weight: bold;
         color: rgb(19, 32, 49);
     }
@@ -29,14 +32,14 @@
         @if (User.IsInRole("Admin"))
         {
             <ul>
-            @foreach (var user in usuarios)
-            {
-                <div class="card-pedido" style="margin: 2vh 0 1vh 0;">
-                    <div class="info">@user.Nome (@user.Email)</div>
-                    <a asp-action="Pedidos" asp-route-usuarioId="@user.Id">Ver pedidos</a>
-                </div>
+                @foreach (var user in usuarios)
+                {
+                    <div class="card-pedido" style="margin: 2vh 0 1vh 0;">
+                        <div class="info">@user.Nome (@user.Email)</div>
+                        <a asp-action="Pedidos" asp-route-usuarioId="@user.Id">Ver pedidos</a>
+                    </div>
 
-            }
+                }
             </ul>
 
         }
@@ -54,9 +57,14 @@
                 {
                     <div class="col-12 mb-2">
                         <div class="pedido d-flex flex-wrap align-items-center border rounded p-2">
-                            <span class="me-3"><strong class="info">Pedido número:</strong> <span class="text-custom">@pedido.Id</span></span>
-                            <span class="me-3"><strong class="info">Descrição:</strong> <span class="text-custom">@pedido.Descricao</span></span>
-                            <span class="me-3"><strong class="info">Data do pedido:</strong> <span class="text-custom">@pedido.DataPedido.ToString("dd/MM/yyyy")</span></span>
+                            <span class="me-3"><strong class="info">Pedido número:</strong> <span
+                                    class="text-custom">@pedido.Id</span></span>
+                            <span class="me-3"><strong class="info">Descrição:</strong> <span
+                                    class="text-custom">@pedido.Descricao</span></span>
+                            <span class="me-3"><strong class="info">Data do pedido:</strong> <span
+                                    class="text-custom">@pedido.DataPedido.ToString("dd/MM/yyyy")</span></span>
+                            <button type="button" class="btn btn-primary apagar-pedido" data-id="@pedido.Id">Apagar
+                            Pedido</button>        
                         </div>
                     </div>
                 }
@@ -66,3 +74,24 @@
 
     </div>
 </div>
+<script>
+    document.querySelectorAll('.apagar-pedido').forEach(function (btn) {
+            btn.addEventListener('click', async function () {
+                const pedidoId = btn.getAttribute('data-id');
+                if (confirm('Tem certeza que deseja apagar este serviço?')) {
+                    const response = await fetch(`/Pedidos/Delete/${pedidoId}`, {
+                        method: 'POST',
+                        headers: {
+                            'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                        }
+                    });
+                    if (response.ok) {
+                        alert('Serviço apagado com sucesso!');
+                        location.reload();
+                    } else {
+                        alert('Erro ao apagar serviço.');
+                    }
+                }
+            });
+        });
+</script>

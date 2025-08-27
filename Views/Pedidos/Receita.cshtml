@@ -28,13 +28,35 @@
             <div class="info">
                 Pedido número: @pedido.Id - @pedido.Descricao - @pedido.DataPedido.ToString("dd/MM/yyyy")
             </div>
+            <button type="button" class="btn btn-primary apagar-pedido" data-id="@pedido.Id">Apagar
+                            Pedido</button>
         </div>
     }
     <div class="valorfinal">
         <h3 class="text-custom">Total do valor gerado nos pedidos: @ViewBag.ValorTotal.ToString("C")</h3>
     </div>
 </div>
-
+<script>
+    document.querySelectorAll('.apagar-pedido').forEach(function (btn) {
+            btn.addEventListener('click', async function () {
+                const pedidoId = btn.getAttribute('data-id');
+                if (confirm('Tem certeza que deseja apagar este serviço?')) {
+                    const response = await fetch(`/Pedidos/Delete/${pedidoId}`, {
+                        method: 'POST',
+                        headers: {
+                            'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                        }
+                    });
+                    if (response.ok) {
+                        alert('Serviço apagado com sucesso!');
+                        location.reload();
+                    } else {
+                        alert('Erro ao apagar serviço.');
+                    }
+                }
+            });
+        });
+</script>
 
 
 

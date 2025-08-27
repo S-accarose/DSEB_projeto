@@ -8,10 +8,9 @@
                 <div class="card" style="min-height: 17rem; width: 100%;">
                     <div class="tituloservico" style="margin: 10px 0 0 15px;">@servico.Nome</div>
                     <img src="@(!string.IsNullOrEmpty(servico.ImagemUrl) ? servico.ImagemUrl : 
-                             !string.IsNullOrEmpty(servico.ImagemString) ? servico.ImagemString : 
-                             "/images/default.jpg")"
-                        style="height: 8vh; width:90%; margin: 2% 5% 0 5%;" 
-                        alt="Imagem do serviço"
+                                                                                                        !string.IsNullOrEmpty(servico.ImagemString) ? servico.ImagemString : 
+                                                                                                        "/images/default.jpg")"
+                        style="height: 14vh; width:90%; margin: 2% 5% 0 5%;" alt="Imagem do serviço"
                         onerror="this.onerror=null; this.src='/images/default.jpg';">
                     <div class="card-body">
                         <p class="card-text descricao">@servico.Descricao</p>
@@ -21,11 +20,16 @@
                         {
                             <div class="mb-3">
                                 <label class="form-label">Número de convidados:</label>
-                                <input type="number" class="form-control numConvidados" min="1" value="1"
+                                <input type="number" class="form-control numConvidados" min="10" value="10" max="100"
                                     data-preco="@servico.Preco" />
                             </div>
-                            
+
                             <button type="button" class="btn btn-primary solicitar-servico" data-id="@servico.Id">Solicitar
+                                Serviço</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-primary apagar-servico" data-id="@servico.Id">Apagar
                                 Serviço</button>
                         }
                     </div>
@@ -40,6 +44,7 @@
     <div class="container mb-3">
         <a class="btn btn-primary" asp-action="Create">Criar Novo Serviço</a>
     </div>
+
 }
 
 @section Scripts {
@@ -77,6 +82,36 @@
                 } else {
                     alert('Erro ao realizar pedido. Faça login ou tente novamente.');
                 }
+            });
+        });
+        document.querySelectorAll('.apagar-servico').forEach(function (btn) {
+            btn.addEventListener('click', async function () {
+                const servicoId = btn.getAttribute('data-id');
+                if (confirm('Tem certeza que deseja apagar este serviço?')) {
+                    const response = await fetch(`/Servicos/Delete/${servicoId}`, {
+                        method: 'POST',
+                        headers: {
+                            'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                        }
+                    });
+                    if (response.ok) {
+                        alert('Serviço apagado com sucesso!');
+                        location.reload();
+                    } else {
+                        alert('Erro ao apagar serviço.');
+                    }
+                }
+            });
+        });
+        document.querySelectorAll('.numConvidados').forEach(function (input) {
+            input.addEventListener('change', function () {
+                let num = parseInt(this.value) || 10;
+                if (num < 10) num = 10;
+                if (num > 100) num = 100;
+                this.value = num;
+                const preco = parseFloat(this.getAttribute('data-preco'));
+                const valorTotal = preco * num;
+                this.closest('.card-body').querySelector('.preco').innerText = "Valor por pessoa: " + valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             });
         });
     </script>

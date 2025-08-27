@@ -109,13 +109,13 @@ namespace DSEB_projeto.Controllers
                 int totalServicos = _context.Servicos.Count();
 
                 // Se houver menos de 10, gera até completar 10
-                if (totalServicos < 10)
-                {
-                    int quantidadeFaltando = 10 - totalServicos;
+                //if (totalServicos < 10)
+                //{
+                //    int quantidadeFaltando = 10 - totalServicos;
 
-                    var seeder = new ServicosSeeder(_context);
-                    seeder.GerarProdutos(quantidadeFaltando);
-                }
+                //    var seeder = new ServicosSeeder(_context);
+                //    seeder.GerarProdutos(quantidadeFaltando);
+                // }
 
                 return View(servicos);
 

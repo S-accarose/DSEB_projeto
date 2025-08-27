@@ -187,7 +187,6 @@ namespace DSEB_projeto.Controllers
             {
                 return NotFound();
             }
-
             return View(pedido);
         }
 
@@ -199,10 +198,16 @@ namespace DSEB_projeto.Controllers
             var pedido = await _context.Pedidos.FindAsync(id);
             if (pedido != null)
             {
+                var receita = await _context.Receitas.FindAsync(id);
+                if (receita != null)
+                {
+                    _context.Receitas.Remove(receita);
+                }
+
                 _context.Pedidos.Remove(pedido);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
