@@ -8,10 +8,6 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
 html {
   position: relative;
   min-height: 100%;
@@ -19,11 +15,11 @@ html {
 
 body {
   margin-bottom: 60px;
-  background-color: #998165;
+  background-color: #5f503e;
 }
 
 footer{
-  background-color:#dac0a3;
+  background-color:#5f503e;
 }
 
 .btn-primary{
@@ -59,5 +55,32 @@ footer{
 }
 
 .text-custom{
-  color: #f0f0f0 !important;
+  color: #b5b5b6 !important;
+}
+
+.form-control{
+  background-color: rgba(179, 179, 179, 0.685) !important;
+  border-color: #102c57 !important;
+}
+
+.form-control:focus{
+  background-color: rgba(179, 179, 179, 0.685) !important;
+  border-color: #102c57 !important;
+  color: black !important;
+  box-shadow: none !important;
+}
+
+a{
+  color: #102c57;
+  text-decoration: none;
+}
+
+a:hover{
+  color: #4d647c;
+  text-decoration: underline;
+}
+
+.nav-link:hover,.navbar-brand:hover{
+  color: white !important;
+  text-decoration: none !important;
 }

@@ -1,17 +1,13 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
-
-<style>
+﻿<style>
     .hero-content-wrapper {
-        min-height: 70vh;
+        min-height: 95vh;
         display: flex;
         align-items: center;
         justify-content: center;
         overflow: hidden;
     }
     .hero-content {
-        background: #dac0a3;
+        background: #6b5f52ce;
         padding: 3rem 2rem;
         border-radius: 1rem;
         box-shadow: 0 0 30px rgba(0,0,0,0.2);
@@ -26,18 +22,29 @@
     }
     .hero-text {
         font-size: 1.2rem;
-        color: #333;
+        color: #ebebeb;
+    }
+    .bg-img-home {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1;
+        background: url('@Url.Content("~/images/buffet-bg.png")') no-repeat center center;
+        background-size: cover;
     }
 </style>
 
-<div class="hero-content-wrapper">
-    <div class="hero-content">
-        <div class="hero-title">Buffet Sabor Divino</div>
-        <div class="hero-text">
-            Bem-vindo ao Buffet Sabor Divino!<br />
-            Especialistas em transformar seu evento em uma experiência gastronômica inesquecível.<br />
-            Oferecemos serviços completos de buffet para festas, casamentos, aniversários e eventos corporativos, com cardápios variados e atendimento personalizado.<br />
-            Contrate online e leve sabor, praticidade e sofisticação para o seu evento!
-        </div>        
+<div class="bg-img-home">
+    <div class="hero-content-wrapper">
+        <div class="hero-content">
+            <div class="hero-title">Buffet Sabor Divino</div>
+            <div class="hero-text">
+                Bem-vindo ao Buffet Sabor Divino!<br />
+                Especialistas em transformar seu evento em uma experiência gastronômica inesquecível.<br />
+                Oferecemos serviços completos de buffet para festas, casamentos, aniversários e eventos corporativos, com cardápios variados e atendimento personalizado.<br />
+                Contrate online e leve sabor, praticidade e sofisticação para o seu evento!
+            </div>        
+        </div>
     </div>
 </div>
